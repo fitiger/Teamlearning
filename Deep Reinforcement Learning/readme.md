@@ -26,4 +26,3 @@ in order to maximize reward.
 - agent's actions affect the subsequent data it receives.
 
 Deep Reinforcement Learning：do not need features engineering and use end-to-end training.  
-
