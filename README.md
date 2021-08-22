@@ -138,6 +138,42 @@ GROUP BY product_type
 HAVING SUM(sale_price) > 1.5* SUM(purchase_price)
 -- Q7
 SELECT *
-  FROM Product
- ORDER BY regist_date DESC, sale_price;
+FROM Product
+ORDER BY ISNULL(regist_date), regist_date DESC, sale_price;
+```
+
+### Task 3 assignment
+
+```sql
+-- Q 3.1
+CREATE VIEW ViewPractice5_1(product_name, sale_price, regist_date)
+AS
+SELECT product_name, sale_price, regist_date
+FROM product
+WHERE sale_price >= 1000
+AND regist_date = '2009-09-20';
+-- Q 3.3
+SELECT product_id,
+       product_name,
+       product_type,
+       sale_price,
+       (SELECT AVG(sale_price) FROM Product) AS sale_price_all
+FROM Product;
+-- Q 3.4
+CREATE VIEW AvgPriceByType AS
+SELECT product_id,
+       product_name,
+       product_type,
+       sale_price,
+       (SELECT AVG(sale_price)
+          FROM Product P2
+         WHERE P1.product_type = P2.product_type
+         GROUP BY P1.product_type) AS avg_sale_price
+FROM Product P1;
+
+-- 
+SELECT SUM(CASE WHEN sale_price <= 1000 THEN 1 ELSE 0 END)               AS low_price,
+       SUM(CASE WHEN sale_price BETWEEN 1001 AND 3000 THEN 1 ELSE 0 END) AS mid_price,
+       SUM(CASE WHEN sale_price >= 3001 THEN 1 ELSE 0 END)               AS high_price
+FROM Product;
 ```
