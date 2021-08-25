@@ -116,7 +116,8 @@ SELECT product_name, purchase_price
 
 FROM → WHERE → GROUP BY → HAVING → SELECT → ORDER BY
 
-###Task 2 assignment
+### Task 2 assignment
+
 ```sql
 -- Q1
 SELECT product_name, regist_date
@@ -176,7 +177,11 @@ SELECT SUM(CASE WHEN sale_price <= 1000 THEN 1 ELSE 0 END)               AS low_
        SUM(CASE WHEN sale_price BETWEEN 1001 AND 3000 THEN 1 ELSE 0 END) AS mid_price,
        SUM(CASE WHEN sale_price >= 3001 THEN 1 ELSE 0 END)               AS high_price
 FROM Product;
+```
 
+### Task 4 assignment
+
+```sql
 -- Q 4.1
 -- Union
 SELECT product_id, product_name
