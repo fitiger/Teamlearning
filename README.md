@@ -176,4 +176,75 @@ SELECT SUM(CASE WHEN sale_price <= 1000 THEN 1 ELSE 0 END)               AS low_
        SUM(CASE WHEN sale_price BETWEEN 1001 AND 3000 THEN 1 ELSE 0 END) AS mid_price,
        SUM(CASE WHEN sale_price >= 3001 THEN 1 ELSE 0 END)               AS high_price
 FROM Product;
+
+-- Q 4.1
+-- Union
+SELECT product_id, product_name
+FROM Product
+WHERE sale_price > 500
+UNION
+SELECT product_id, product_name
+FROM Product2
+WHERE sale_price > 500;
+
+-- Q 4.2
+-- Intersection
+SELECT p1.*
+FROM Product p1
+INNER JOIN Product2 p2
+ON p1.product_id=p2.product_id;
+-- Symmetric difference
+SELECT product_id, product_name
+FROM Product
+WHERE product_id NOT IN (SELECT product_id FROM Product2)
+UNION
+SELECT product_id, product_name
+FROM Product2
+WHERE product_id NOT IN (SELECT product_id FROM Product)
+
+-- Q 4.3
+SELECT S.shop_name, S.product_id, P.product_name, P.sale_price
+FROM shop_product S
+INNER JOIN 
+product AS P
+ON S.product_id=P.product_id
+WHERE S.product_id in
+(SELECT product_id
+FROM product AS P1
+WHERE sale_price = (SELECT MAX(sale_price)
+                       FROM product AS P2
+                      WHERE P1.product_type = P2.product_type
+                      GROUP BY product_type));
+
+-- Q 4.4
+SELECT product_type, product_name, sale_price
+FROM product AS P1
+WHERE sale_price = (SELECT MAX(sale_price)
+                       FROM product AS P2
+                      WHERE P1.product_type = P2.product_type
+                      GROUP BY product_type);
+
+SELECT p1.product_id, p1.product_name, p1.sale_price, p1.product_type
+FROM product AS P1
+INNER JOIN
+(SELECT MAX(p2.sale_price) as max_price, p2.product_type
+FROM product AS p2
+GROUP BY product_type) AS p3
+ON (p1.product_type=p3.product_type
+AND p1.sale_price=p3.max_price)
+
+-- Q 4.5
+SELECT p1.product_id, 
+       p1.product_name, 
+       p1.sale_price, 
+	   p1.product_type,
+	   (SELECT sum(p2.sale_price)
+        FROM product AS p2
+        WHERE (p2.sale_price < p1.sale_price)
+		OR ((p2.sale_price=p1.sale_price)
+        AND (p2.product_id<=p1.product_id))
+       ) AS cum_price
+FROM product AS P1
+ORDER BY p1.sale_price, p1.product_id
+
 ```
