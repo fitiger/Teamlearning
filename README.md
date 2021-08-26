@@ -253,3 +253,23 @@ FROM product AS P1
 ORDER BY p1.sale_price, p1.product_id
 
 ```
+
+### Task 5 assignment
+
+```sql
+-- Q 5.1
+SELECT  product_id
+       ,product_name
+       ,sale_price
+       ,MAX(sale_price) OVER (ORDER BY product_id) AS Current_max_price
+FROM product
+-- max price of all products id <= now
+
+-- Q 5.2
+SELECT  product_id
+       ,product_name
+       ,sale_price
+       ,regist_date
+       ,SUM(sale_price) OVER (PARTITION BY regist_date ORDER BY regist_date) AS sum_day_sale
+  FROM product;
+```
